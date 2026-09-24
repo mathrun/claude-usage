@@ -14,12 +14,36 @@ Current week (Fable)       █████████████░░░░�
 updated 21:06:32 · every 300s · Ctrl-C to quit
 ```
 
-It reuses the login from Claude Code, so no extra setup is needed. The token
+It reuses the login from Claude Code, so no extra login is needed. The token
 is looked up in this order:
 
 1. `CLAUDE_CODE_OAUTH_TOKEN` environment variable
 2. macOS Keychain entry `Claude Code-credentials`
 3. `~/.claude/.credentials.json`
+
+## Prerequisites
+
+To build:
+
+- Go 1.26 or newer (`go.mod` says `go 1.26.0`). Check with `go version`.
+- `make` is optional. You can call `go build` directly.
+- If you use goenv or another version manager, make sure `GOROOT` points to
+  the same Go as the `go` on your `PATH`. A stale `GOROOT` fails the build
+  with `compile: version "go1.x" does not match go tool version "go1.y"`.
+  Fix it with `unset GOROOT` or by selecting a Go 1.26 version in the manager.
+
+To run:
+
+- Claude Code is installed, and you have logged in once with `claude`.
+- The login is a Claude subscription login (Pro, Max, Team or Enterprise).
+  An Anthropic API key login has no OAuth token and no usage limits to show.
+- macOS: the tool calls the built-in `security` command to read the Keychain.
+  macOS can ask once whether to allow this. Choose "Always Allow".
+- Linux and other systems: the credentials file `~/.claude/.credentials.json`
+  must exist. Claude Code writes it when you log in.
+- Network access to `https://api.anthropic.com`.
+- The tool does not refresh the token itself. When the token expires, start
+  `claude` once and the tool works again.
 
 ## Build
 
